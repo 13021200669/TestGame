@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 [System.Serializable]
 public class ActionStateInfo
@@ -20,31 +18,55 @@ public partial class CharacterController : MonoBehaviour
 {
     private Animator animator;
 
-    [Header("动画器变量")]
-    [SerializeField] private string Key_isRun = "IsRun";
-    [SerializeField] private string Key_isAttack01 = "IsAttack01";
-    [SerializeField] private string Key_isAttack02 = "IsAttack02";
-    [SerializeField] private string Key_isJump = "IsJump";
-    [SerializeField] private string Key_isDamage = "IsDamage";
-    [SerializeField] private string Key_isDead = "IsDead";
+    [Header("动画器")]
+    [Label("状态变量 - 跑")] public string Key_isRun = "IsRun";
+    [Label("状态变量 - 跳")] public string Key_isJump = "IsJump";
+    [Label("状态变量 - 攻击1")] public string Key_isAttack01 = "IsAttack01";
+    [Label("状态变量 - 攻击2")] public string Key_isAttack02 = "IsAttack02";
+    [Label("状态变量 - 受击")] public string Key_isDamage = "IsDamage";
+    [Label("状态变量 - 死亡")] public string Key_isDead = "IsDead";
 
+    /// <summary>
+    /// Start - 动作初始化
+    /// </summary>
     void InitMotionController()
     {
+        //获取组件
         animator = GetComponentInChildren<Animator>();
     }
 
+    /// <summary>
+    /// Update - 动作控制
+    /// </summary>
     void UpdateMotionController()
     {
+        //旋转模型，指向运动方向
+        RotateBody();
+
+        //运动
         MotionTrigger(0, Key_isRun, KeyCode.A, KeyCode.S, KeyCode.D, KeyCode.W);
-
-        MotionTrigger(1, Key_isAttack01, 0);
-
-        MotionTrigger(1, Key_isAttack02, 1);
-
+        //跳跃
         MotionTrigger(1, Key_isJump, KeyCode.Space);
+        //攻击1
+        MotionTrigger(1, Key_isAttack01, 0);
+        //攻击2
+        MotionTrigger(1, Key_isAttack02, 1);
     }
+
     /// <summary>
-    /// 键盘触发
+    /// 旋转模型，指向运动方向
+    /// </summary>
+    public void RotateBody()
+    {
+        float x = Input.GetAxis("Horizontal");
+        float z = Input.GetAxis("Vertical");
+
+        if (x != 0 || z != 0)
+            Body.rotation = Quaternion.LookRotation(x * RotateX.right + z * RotateX.forward);
+    }
+
+    /// <summary>
+    /// 键盘触发（重载1）
     /// </summary>
     /// <param name="mode">0 - 按住，1 - 按下，2 - 抬起</param>
     /// <param name="trigger">动画器变量名</param>
@@ -79,7 +101,7 @@ public partial class CharacterController : MonoBehaviour
     }
 
     /// <summary>
-    /// 鼠标触发
+    /// 鼠标触发（重载2）
     /// </summary>
     /// <param name="mode">0 - 按住，1 - 按下，2 - 抬起</param>
     /// <param name="trigger">动画器变量名</param>
