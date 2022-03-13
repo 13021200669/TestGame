@@ -1,10 +1,10 @@
 using UnityEngine;
 
-public partial class CharacterController : MonoBehaviour
+public partial class CharacterControl : MonoBehaviour
 {
-    [Header("子模块")]
-    [Label("骨骼蒙皮")] public Transform Body;
-    [Label("玩家摄像机")] public Transform Camera_Player;
+    //子模块
+    [SerializeField] public Transform Body;
+    [SerializeField] public Transform Camera_Player;
 
     void Start()
     {

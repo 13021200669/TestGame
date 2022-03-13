@@ -2,27 +2,28 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public partial class CharacterController : MonoBehaviour
+public partial class CharacterControl : MonoBehaviour
 {
-    [Header("摄像机控制")]
-    [Label("水平旋转")] public Transform RotateX;
-    [Label("竖直旋转")] public Transform RotateY;
+    //子模块
+    [SerializeField] public Transform RotateX;
+    [SerializeField] public Transform RotateY;
 
-    [Label("水平灵敏度")] public float Sensitive_X = 200f;
-    [Label("竖直灵敏度")] public float Sensitive_Y = 200f;
+    [SerializeField] public float Sensitive_X = 200f;//灵敏度 X
+    [SerializeField] public float Sensitive_Y = 200f;//灵敏度 Y
 
-    [Label("最大视角（竖直）", -90, 90)] public float MaxAngle_Y = 80f;
-    [Label("最小视角（竖直）", -90, 90)] public float MinAngle_Y = -80f;
+    [SerializeField] public float MinAngle_Y = -80f;//最小视角 Y
+    [SerializeField] public float MaxAngle_Y = 80f;//最大视角 Y
 
-    [Label("摄像机高度", -2, 2)] public float CameraHeight = 1f;
-    [Label("摄像机初始距离", -5, 0)] public float CameraDistance = -2f;
+    [SerializeField] public float CameraHeight = 0.8f;//初始视高
+    [SerializeField] public float CameraDistance = -2.5f;//初始视距
 
-    [Label("视距调整速度")] public float Speed_ViewDistanceShift = 300f;
-    [Label("视距限制", -5, 0)] public float MaxViewDistance = 0f;
-    [Label("视距限制", -5, 0)] public float MinViewDistance = -5f;
+    [SerializeField] public float Speed_ViewDistanceShift = 300f;//视距调整速度
+    [SerializeField] public float MinViewDistance = -3f;//最小视距
+    [SerializeField] public float MaxViewDistance = -1.5f;//最大视距
 
-    [Label("正常视野")] public float Normal_Field_of_View = 60f;
-    [Label("冲刺视野")] public float Accelerate_Field_of_View = 80f;
+    [SerializeField] public float Normal_Field_of_View = 60f;//正常视野
+    [SerializeField] public float Accelerate_Field_of_View = 80f;//冲刺视野
+
     private float TargetFieldofView;//目标视野（用于视野渐变过渡）
 
     /// <summary>
@@ -63,10 +64,12 @@ public partial class CharacterController : MonoBehaviour
         //上下视角旋转
         float deltaY = deltaMouseY * Time.deltaTime * Sensitive_Y;
         float NowY = RotateY.localEulerAngles.x;
-        if (NowY + deltaY > 360 + MinAngle_Y || NowY + deltaY < MaxAngle_Y)
+        if (NowY + deltaY >= 360 + MinAngle_Y || NowY + deltaY <= MaxAngle_Y)
             RotateY.localEulerAngles += new Vector3(deltaY, 0, 0);
-        else
-            RotateY.localEulerAngles = new Vector3(0, 0, 0);
+        else if (NowY + deltaY < 360 + MinAngle_Y && NowY + deltaY > 180)
+            RotateY.localEulerAngles = new Vector3(360 + MinAngle_Y, 0, 0);
+        else if (NowY + deltaY > MaxAngle_Y && NowY + deltaY < 180)
+            RotateY.localEulerAngles = new Vector3(MaxAngle_Y, 0, 0);
     }
 
     /// <summary>

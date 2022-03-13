@@ -14,7 +14,7 @@ public enum ActionState
     Idle = 0, Idle_Sad, Run, Attack01, Attack02, Jump, Damage, Dead, None
 }
 
-public partial class CharacterController : MonoBehaviour
+public partial class CharacterControl : MonoBehaviour
 {
     private Animator animator;
 

@@ -1,16 +1,17 @@
 ﻿using UnityEngine;
 
-public partial class CharacterController : MonoBehaviour
+
+public partial class CharacterControl : MonoBehaviour
 {
-    [Header("运动参数")]
-    [Label("移动速度")] public float MoveSpeed = 10;
-    [Label("冲刺倍率")] public float Accelerate_Multiple = 3f;
-    [Label("冲刺时间")] public float Accelerate_Time = 1f;
+    //运动模块
+    [SerializeField] public float MoveSpeed = 10;//移动速度
+    [SerializeField] public float JumpForce = 100;//跳跃力度
+
+    [SerializeField] public float Accelerate_Multiple = 3f;//冲刺倍率
+    [SerializeField] public float Accelerate_Time = 1f;//冲刺时间
 
     private float MoveMultiple = 1f;
     private bool isAccelerate = false;
-
-    [Label("跳跃力")] public float JumpForce = 100;
 
     /// <summary>
     /// 运动初始化

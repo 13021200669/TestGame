@@ -5,6 +5,7 @@ using UnityEditor;
 [CustomPropertyDrawer(typeof(Label))]
 public class LabelTranslateDrawer : PropertyDrawer
 {
+    public float FontHeight = 18f;
     public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
     {
         //获取Attribute标记的Property
@@ -16,11 +17,17 @@ public class LabelTranslateDrawer : PropertyDrawer
         //绘制EditorGUI
         if (variable.UseRange)
         {
-            EditorGUI.Slider(position, property, variable.MinValue, variable.MaxValue, label);
+            Rect rect1 = new Rect(position.x, position.y, 200, FontHeight);
+            Rect rect2 = new Rect(position.x + rect1.width, position.y, 200, FontHeight);
+            EditorGUI.LabelField(rect1, label);
+            EditorGUI.Slider(rect2, property, variable.MinValue, variable.MaxValue, new GUIContent());
         }
         else
         {
-            EditorGUI.PropertyField(position, property, label);
+            Rect rect1 = new Rect(position.x, position.y, 200, FontHeight);
+            Rect rect2 = new Rect(position.x + rect1.width, position.y, 200, FontHeight);
+            EditorGUI.LabelField(rect1, label);
+            EditorGUI.PropertyField(rect2, property, new GUIContent());
         }
     }
 }
