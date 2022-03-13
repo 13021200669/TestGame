@@ -54,6 +54,7 @@ public partial class CharacterControl : MonoBehaviour
         MoveMultiple = Accelerate_Multiple;
         //视野拉远
         TargetFieldofView = Accelerate_Field_of_View;
+        TargetFocusSize = Accelerate_FocusSize;
         //冲刺时间控制
         Invoke("SpeedRecover", Accelerate_Time);
         //标记冲刺状态
@@ -69,6 +70,7 @@ public partial class CharacterControl : MonoBehaviour
         MoveMultiple = 1f;
         //视野恢复
         TargetFieldofView = Normal_Field_of_View;
+        TargetFocusSize = Normal_FocusSize;
         //退出冲刺状态
         isAccelerate = false;
     }

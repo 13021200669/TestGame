@@ -442,7 +442,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh22844
+  m_Name: pb_Mesh31102
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -600,6 +600,28 @@ Mesh:
     offset: 0
     size: 0
     path: 
+--- !u!1 &217622750 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5950765071216363974, guid: eccd0de93d35c954c87e434c9bbb9e4e, type: 3}
+  m_PrefabInstance: {fileID: 1562992362}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &217622753
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 217622750}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 12bb41c3617910d4e9f2d1a9dd01e938, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SCShader: {fileID: 4800000, guid: 75db6f61821f65a4f995240f4f99fe81, type: 3}
+  CenterX: 0
+  CenterY: 0
+  _Size: 0.15
+  _Eyes: 2
 --- !u!1 &383536959
 GameObject:
   m_ObjectHideFlags: 0
@@ -4923,7 +4945,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh22890
+  m_Name: pb_Mesh31156
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -5087,7 +5109,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh22792
+  m_Name: pb_Mesh31050
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -23682,6 +23704,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1562992364}
     - target: {fileID: 6759074343372423886, guid: eccd0de93d35c954c87e434c9bbb9e4e, type: 3}
+      propertyPath: Focus
+      value: 
+      objectReference: {fileID: 217622753}
+    - target: {fileID: 6759074343372423886, guid: eccd0de93d35c954c87e434c9bbb9e4e, type: 3}
       propertyPath: RotateX
       value: 
       objectReference: {fileID: 1562992366}
@@ -23706,6 +23732,10 @@ PrefabInstance:
       value: -80
       objectReference: {fileID: 0}
     - target: {fileID: 6759074343372423886, guid: eccd0de93d35c954c87e434c9bbb9e4e, type: 3}
+      propertyPath: FocusScript
+      value: 
+      objectReference: {fileID: 217622753}
+    - target: {fileID: 6759074343372423886, guid: eccd0de93d35c954c87e434c9bbb9e4e, type: 3}
       propertyPath: Sensitive_X
       value: 200
       objectReference: {fileID: 0}
@@ -23724,6 +23754,22 @@ PrefabInstance:
     - target: {fileID: 6759074343372423886, guid: eccd0de93d35c954c87e434c9bbb9e4e, type: 3}
       propertyPath: MinViewDistance
       value: -3
+      objectReference: {fileID: 0}
+    - target: {fileID: 6759074343372423886, guid: eccd0de93d35c954c87e434c9bbb9e4e, type: 3}
+      propertyPath: NormalFocusSize
+      value: 0.15
+      objectReference: {fileID: 0}
+    - target: {fileID: 6759074343372423886, guid: eccd0de93d35c954c87e434c9bbb9e4e, type: 3}
+      propertyPath: Normal_FocusSize
+      value: 0.15
+      objectReference: {fileID: 0}
+    - target: {fileID: 6759074343372423886, guid: eccd0de93d35c954c87e434c9bbb9e4e, type: 3}
+      propertyPath: AccelerateFocusSize
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6759074343372423886, guid: eccd0de93d35c954c87e434c9bbb9e4e, type: 3}
+      propertyPath: Accelerate_FocusSize
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 6759074343372423886, guid: eccd0de93d35c954c87e434c9bbb9e4e, type: 3}
       propertyPath: Normal_Field_of_View
@@ -23868,7 +23914,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh22824
+  m_Name: pb_Mesh31082
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2

@@ -24,7 +24,12 @@ public partial class CharacterControl : MonoBehaviour
     [SerializeField] public float Normal_Field_of_View = 60f;//正常视野
     [SerializeField] public float Accelerate_Field_of_View = 80f;//冲刺视野
 
+    [SerializeField] public CameraFilterPack_Blur_Focus FocusScript;//视野模糊脚本
+    [SerializeField] public float Normal_FocusSize = 0.15f;//正常视野模糊程度
+    [SerializeField] public float Accelerate_FocusSize = 10f;//冲刺视野模糊程度
+
     private float TargetFieldofView;//目标视野（用于视野渐变过渡）
+    private float TargetFocusSize;//目标视野模糊程度
 
     /// <summary>
     /// Start - 摄像机初始化
@@ -37,6 +42,7 @@ public partial class CharacterControl : MonoBehaviour
         Camera_Player.localPosition = new Vector3(0, CameraHeight, CameraDistance);
 
         TargetFieldofView = Normal_Field_of_View;
+        TargetFocusSize = Normal_FocusSize;
     }
 
     /// <summary>
@@ -94,5 +100,6 @@ public partial class CharacterControl : MonoBehaviour
 
         //视野调整
         Camera_Player.GetComponent<Camera>().fieldOfView = Mathf.Lerp(Camera_Player.GetComponent<Camera>().fieldOfView, TargetFieldofView, Time.deltaTime / 0.2f);
+        FocusScript._Size= Mathf.Lerp(FocusScript._Size, TargetFocusSize, Time.deltaTime / 0.2f);
     }
 }

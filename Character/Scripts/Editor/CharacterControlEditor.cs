@@ -37,6 +37,14 @@ public class CharacterControlEditor : Editor
     SerializedProperty _Accelerate_Field_of_View;
     const float _MinLimit_Field_of_View = 40f;
     const float _MaxLimit_Field_of_View = 100f;
+    
+    //视野模糊脚本
+    SerializedProperty _FocusScript;
+    //视野模糊程度
+    SerializedProperty _Normal_FocusSize;
+    SerializedProperty _Accelerate_FocusSize;
+    const float _MinLimit_FocusSize = 0.15f;
+    const float _MaxLimit_FocusSize = 10f;
 
     //--------------------------相机模块--------------------------
     //摄像机旋转层级 X/Y
@@ -87,6 +95,10 @@ public class CharacterControlEditor : Editor
         _Normal_Field_of_View = serializedObject.FindProperty("Normal_Field_of_View");
         _Accelerate_Field_of_View = serializedObject.FindProperty("Accelerate_Field_of_View");
 
+        _FocusScript = serializedObject.FindProperty("FocusScript");
+        _Normal_FocusSize = serializedObject.FindProperty("Normal_FocusSize");
+        _Accelerate_FocusSize = serializedObject.FindProperty("Accelerate_FocusSize");
+
         _RotateX = serializedObject.FindProperty("RotateX");
         _RotateY = serializedObject.FindProperty("RotateY");
         _Sensitive_X = serializedObject.FindProperty("Sensitive_X");
@@ -106,12 +118,14 @@ public class CharacterControlEditor : Editor
 
         //--------------------------绘制GUILayout--------------------------
 
+        //--------------------------子物体--------------------------
         EditorGUILayout.LabelField("子物体");
 
         CustomEditorGUILayout.CustomPropertyField("骨骼蒙皮", _Body);
 
         CustomEditorGUILayout.CustomPropertyField("主摄像机", _Camera_Player);
 
+        //--------------------------运动模块--------------------------
         EditorGUILayout.Space(20);
         EditorGUILayout.LabelField("运动模块");
 
@@ -123,8 +137,13 @@ public class CharacterControlEditor : Editor
 
         CustomEditorGUILayout.CustomSlider("正常视野", _Normal_Field_of_View, "冲刺视野", _Accelerate_Field_of_View, _MinLimit_Field_of_View, _MaxLimit_Field_of_View);
 
+        CustomEditorGUILayout.CustomPropertyField("模糊控制", _FocusScript);
+
+        CustomEditorGUILayout.CustomSlider("正常模糊", _Normal_FocusSize, "冲刺模糊", _Accelerate_FocusSize, _MinLimit_FocusSize, _MaxLimit_FocusSize);
+
+        //--------------------------相机模块--------------------------
         EditorGUILayout.Space(20);
-        EditorGUILayout.LabelField("摄像机模块");
+        EditorGUILayout.LabelField("相机模块");
 
         CustomEditorGUILayout.CustomPropertyField("水平旋转", _RotateX, "竖直旋转", _RotateY);
 
