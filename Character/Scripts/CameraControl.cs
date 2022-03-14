@@ -36,10 +36,7 @@ public partial class CharacterControl : MonoBehaviour
     /// </summary>
     void InitCameraController()
     {
-        if (!Camera_Player)
-            Camera_Player = GameObject.Find("Camera_Player").transform;
-
-        Camera_Player.localPosition = new Vector3(0, CameraHeight, CameraDistance);
+        CamPlayer.localPosition = new Vector3(0, CameraHeight, CameraDistance);
 
         TargetFieldofView = Normal_Field_of_View;
         TargetFocusSize = Normal_FocusSize;
@@ -87,19 +84,19 @@ public partial class CharacterControl : MonoBehaviour
         float deltaViewDistance = Input.GetAxis("Mouse ScrollWheel");
 
         //视距调整
-        if (Camera_Player.localPosition.z <= MaxViewDistance && Camera_Player.localPosition.z >= MinViewDistance)
+        if (CamPlayer.localPosition.z <= MaxViewDistance && CamPlayer.localPosition.z >= MinViewDistance)
         {
-            Camera_Player.localPosition += new Vector3(0, 0, deltaViewDistance * Time.deltaTime * Speed_ViewDistanceShift);
+            CamPlayer.localPosition += new Vector3(0, 0, deltaViewDistance * Time.deltaTime * Speed_ViewDistanceShift);
 
             //检查视距是否超出限制
-            if (Camera_Player.localPosition.z > MaxViewDistance)
-                Camera_Player.localPosition = new Vector3(0, CameraHeight, MaxViewDistance);
-            else if (Camera_Player.localPosition.z < MinViewDistance)
-                Camera_Player.localPosition = new Vector3(0, CameraHeight, MinViewDistance);
+            if (CamPlayer.localPosition.z > MaxViewDistance)
+                CamPlayer.localPosition = new Vector3(0, CameraHeight, MaxViewDistance);
+            else if (CamPlayer.localPosition.z < MinViewDistance)
+                CamPlayer.localPosition = new Vector3(0, CameraHeight, MinViewDistance);
         }
 
         //视野调整
-        Camera_Player.GetComponent<Camera>().fieldOfView = Mathf.Lerp(Camera_Player.GetComponent<Camera>().fieldOfView, TargetFieldofView, Time.deltaTime / 0.2f);
+        CamPlayer.GetComponent<Camera>().fieldOfView = Mathf.Lerp(CamPlayer.GetComponent<Camera>().fieldOfView, TargetFieldofView, Time.deltaTime / 0.2f);
         FocusScript._Size= Mathf.Lerp(FocusScript._Size, TargetFocusSize, Time.deltaTime / 0.2f);
     }
 }

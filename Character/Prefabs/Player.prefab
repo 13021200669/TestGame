@@ -72,9 +72,11 @@ GameObject:
   m_Component:
   - component: {fileID: 5950765071216363993}
   - component: {fileID: 5950765071216363995}
+  - component: {fileID: 8362221469232177425}
   - component: {fileID: 5950765071216363992}
+  - component: {fileID: 217622753}
   m_Layer: 0
-  m_Name: Camera_Player
+  m_Name: CamPlayer
   m_TagString: MainCamera
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -106,10 +108,9 @@ Camera:
   m_ClearFlags: 1
   m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
   m_projectionMatrixMode: 1
-  m_GateFitMode: 2
-  m_FOVAxisMode: 0
   m_SensorSize: {x: 36, y: 24}
   m_LensShift: {x: 0, y: 0}
+  m_GateFitMode: 2
   m_FocalLength: 50
   m_NormalizedViewPortRect:
     serializedVersion: 2
@@ -137,6 +138,23 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
+--- !u!114 &8362221469232177425
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5950765071216363974}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 12bb41c3617910d4e9f2d1a9dd01e938, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SCShader: {fileID: 4800000, guid: 75db6f61821f65a4f995240f4f99fe81, type: 3}
+  CenterX: 0
+  CenterY: 0
+  _Size: 5
+  _Eyes: 2
 --- !u!81 &5950765071216363992
 AudioListener:
   m_ObjectHideFlags: 0
@@ -145,6 +163,23 @@ AudioListener:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5950765071216363974}
   m_Enabled: 1
+--- !u!114 &217622753
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5950765071216363974}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 12bb41c3617910d4e9f2d1a9dd01e938, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SCShader: {fileID: 4800000, guid: 75db6f61821f65a4f995240f4f99fe81, type: 3}
+  CenterX: 0
+  CenterY: 0
+  _Size: 0.15
+  _Eyes: 2
 --- !u!1 &5950765071605231575
 GameObject:
   m_ObjectHideFlags: 0
@@ -185,7 +220,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5950765072218836748}
-  - component: {fileID: 6759074343372423886}
+  - component: {fileID: 6264504955570860598}
   - component: {fileID: 5649740688056762208}
   - component: {fileID: 6534418194775455677}
   m_Layer: 0
@@ -211,7 +246,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6759074343372423886
+--- !u!114 &6264504955570860598
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -220,34 +255,39 @@ MonoBehaviour:
   m_GameObject: {fileID: 5950765072218836747}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ede3419edb123364297a1ace8a9f1c5c, type: 3}
+  m_Script: {fileID: 11500000, guid: c8632dbeab1e4904ab6fc39dbcfa72de, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   RotateX: {fileID: 5950765070244667588}
   RotateY: {fileID: 5950765070283472510}
   Sensitive_X: 200
   Sensitive_Y: 200
-  MaxAngle_Y: 80
   MinAngle_Y: -80
+  MaxAngle_Y: 80
   CameraHeight: 0.8
   CameraDistance: -2.5
   Speed_ViewDistanceShift: 300
-  MaxViewDistance: -1.5
   MinViewDistance: -3
+  MaxViewDistance: -1.5
   Normal_Field_of_View: 60
   Accelerate_Field_of_View: 80
+  FocusScript: {fileID: 8362221469232177425}
+  Normal_FocusSize: 0.15
+  Accelerate_FocusSize: 2
   Body: {fileID: 206570442623375572}
-  Camera_Player: {fileID: 5950765071216363993}
+  CamPlayer: {fileID: 5950765071216363993}
+  AnimPlayer: {fileID: 261054239473851104}
+  RigPlayer: {fileID: 6534418194775455677}
   Key_isRun: IsRun
   Key_isJump: IsJump
   Key_isAttack01: IsAttack01
   Key_isAttack02: IsAttack02
   Key_isDamage: IsDamage
   Key_isDead: IsDead
-  MoveSpeed: 10
+  MoveSpeed: 5
+  JumpForce: 100
   Accelerate_Multiple: 3
-  Accelerate_Time: 7
-  JumpForce: 200
+  Accelerate_Time: 1
 --- !u!136 &5649740688056762208
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -337,6 +377,13 @@ PrefabInstance:
   m_SourcePrefab: {fileID: 100100000, guid: f85c4948bfaac4e48b32c1254bdec6b8, type: 3}
 --- !u!4 &206570442623375572 stripped
 Transform:
-  m_CorrespondingSourceObject: {fileID: 4679013640650686, guid: f85c4948bfaac4e48b32c1254bdec6b8, type: 3}
+  m_CorrespondingSourceObject: {fileID: 4679013640650686, guid: f85c4948bfaac4e48b32c1254bdec6b8,
+    type: 3}
+  m_PrefabInstance: {fileID: 201955207110354794}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &261054239473851104 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 95154219944295818, guid: f85c4948bfaac4e48b32c1254bdec6b8,
+    type: 3}
   m_PrefabInstance: {fileID: 201955207110354794}
   m_PrefabAsset: {fileID: 0}

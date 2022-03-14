@@ -16,8 +16,6 @@ public enum ActionState
 
 public partial class CharacterControl : MonoBehaviour
 {
-    private Animator animator;
-
     [Header("动画器")]
     [Label("状态变量 - 跑")] public string Key_isRun = "IsRun";
     [Label("状态变量 - 跳")] public string Key_isJump = "IsJump";
@@ -31,8 +29,7 @@ public partial class CharacterControl : MonoBehaviour
     /// </summary>
     void InitMotionController()
     {
-        //获取组件
-        animator = GetComponentInChildren<Animator>();
+
     }
 
     /// <summary>
@@ -92,11 +89,11 @@ public partial class CharacterControl : MonoBehaviour
 
         if (isAnyoneTrue)
         {
-            animator.SetBool(trigger, true);
+            AnimPlayer.SetBool(trigger, true);
         }
         else
         {
-            animator.SetBool(trigger, false);
+            AnimPlayer.SetBool(trigger, false);
         }
     }
 
@@ -127,11 +124,11 @@ public partial class CharacterControl : MonoBehaviour
 
         if (isAnyoneTrue)
         {
-            animator.SetBool(trigger, true);
+            AnimPlayer.SetBool(trigger, true);
         }
         else
         {
-            animator.SetBool(trigger, false);
+            AnimPlayer.SetBool(trigger, false);
         }
     }
 }

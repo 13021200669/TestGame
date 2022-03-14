@@ -7,6 +7,8 @@ public partial class CharacterControl : MonoBehaviour
     [SerializeField] public float MoveSpeed = 10;//移动速度
     [SerializeField] public float JumpForce = 100;//跳跃力度
 
+    [SerializeField] public bool isAccelerateTimeUnLimited = false;//无限冲刺
+
     [SerializeField] public float Accelerate_Multiple = 3f;//冲刺倍率
     [SerializeField] public float Accelerate_Time = 1f;//冲刺时间
 
@@ -26,7 +28,18 @@ public partial class CharacterControl : MonoBehaviour
     /// </summary>
     public void UpdateMovementController()
     {
-        if (!isAccelerate && (Input.GetKeyDown(KeyCode.LeftShift) || Input.GetKeyDown(KeyCode.RightShift))) Accelerate();
+        if (isAccelerateTimeUnLimited)//无限冲刺
+        {
+            if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift))
+                Accelerate();
+            else if (Input.GetKeyUp(KeyCode.LeftShift) || Input.GetKeyUp(KeyCode.RightShift))
+                SpeedRecover();
+        }
+        else//限时冲刺
+        {
+            if (!isAccelerate && (Input.GetKeyDown(KeyCode.LeftShift) || Input.GetKeyDown(KeyCode.RightShift)))
+                AccelerateLimited();
+        }
 
         if (Input.GetKeyDown(KeyCode.Space)) Jump();
 
@@ -46,9 +59,21 @@ public partial class CharacterControl : MonoBehaviour
     }
 
     /// <summary>
-    /// 冲刺
+    /// 冲刺（无限）
     /// </summary>
     public void Accelerate()
+    {
+        //速度系数变大
+        MoveMultiple = Accelerate_Multiple;
+        //视野拉远
+        TargetFieldofView = Accelerate_Field_of_View;
+        TargetFocusSize = Accelerate_FocusSize;
+    }
+
+    /// <summary>
+    /// 冲刺（限时）
+    /// </summary>
+    public void AccelerateLimited()
     {
         //速度系数变大
         MoveMultiple = Accelerate_Multiple;
@@ -80,6 +105,6 @@ public partial class CharacterControl : MonoBehaviour
     /// </summary>
     public void Jump()
     {
-        GetComponent<Rigidbody>().AddForce(RotateX.up * JumpForce);
+        RigPlayer.AddForce(Vector3.up * JumpForce);
     }
 }

@@ -4,7 +4,27 @@ public partial class CharacterControl : MonoBehaviour
 {
     //всдё©И
     [SerializeField] public Transform Body;
-    [SerializeField] public Transform Camera_Player;
+    [SerializeField] public Transform CamPlayer;
+    [SerializeField] public Animator AnimPlayer;
+    [SerializeField] public Rigidbody RigPlayer;
+
+    private void Reset()
+    {
+        if (!Body)
+            Body = transform.Find("Body");
+        if (!CamPlayer)
+            CamPlayer = GameObject.Find("CamPlayer").transform;
+        if (!RotateX)
+            RotateX = GameObject.Find("RotateX").transform;
+        if (!RotateY)
+            RotateY = GameObject.Find("RotateY").transform;
+        if (!AnimPlayer)
+            AnimPlayer = GetComponentInChildren<Animator>();
+        if (!RigPlayer)
+            RigPlayer = GetComponent<Rigidbody>();
+        if (!FocusScript)
+            FocusScript = GetComponentInChildren<CameraFilterPack_Blur_Focus>();
+    }
 
     void Start()
     {
