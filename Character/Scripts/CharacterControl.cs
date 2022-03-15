@@ -2,28 +2,32 @@ using UnityEngine;
 
 public partial class CharacterControl : MonoBehaviour
 {
-    //всдё©И
-    [SerializeField] public Transform Body;
-    [SerializeField] public Transform CamPlayer;
-    [SerializeField] public Animator AnimPlayer;
-    [SerializeField] public Rigidbody RigPlayer;
-
-    private void Reset()
+    public bool CheckDisConnected()
     {
-        if (!Body)
-            Body = transform.Find("Body");
+        return !RigPlayer || !ColPlayer || !CamPlayer || !FocusScript || !RotateX || !RotateY || !Body || !AnimPlayer;
+    }
+
+    public void AutoConnect()
+    {
+        if (!RigPlayer)
+            RigPlayer = GetComponent<Rigidbody>();
+        if (!ColPlayer)
+            ColPlayer = GetComponent<CapsuleCollider>();
+
         if (!CamPlayer)
             CamPlayer = GameObject.Find("CamPlayer").transform;
+        if (!FocusScript)
+            FocusScript = GetComponentInChildren<CameraFilterPack_Blur_Focus>();
+
         if (!RotateX)
             RotateX = GameObject.Find("RotateX").transform;
         if (!RotateY)
             RotateY = GameObject.Find("RotateY").transform;
+
+        if (!Body)
+            Body = transform.Find("Body");
         if (!AnimPlayer)
             AnimPlayer = GetComponentInChildren<Animator>();
-        if (!RigPlayer)
-            RigPlayer = GetComponent<Rigidbody>();
-        if (!FocusScript)
-            FocusScript = GetComponentInChildren<CameraFilterPack_Blur_Focus>();
     }
 
     void Start()
@@ -53,11 +57,6 @@ public partial class CharacterControl : MonoBehaviour
         {
             Cursor.lockState = CursorLockMode.Locked;
         }
-
-    }
-
-    private void FixedUpdate()
-    {
 
     }
 }

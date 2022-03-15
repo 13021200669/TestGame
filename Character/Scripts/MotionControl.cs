@@ -16,13 +16,15 @@ public enum ActionState
 
 public partial class CharacterControl : MonoBehaviour
 {
-    [Header("动画器")]
-    [Label("状态变量 - 跑")] public string Key_isRun = "IsRun";
-    [Label("状态变量 - 跳")] public string Key_isJump = "IsJump";
-    [Label("状态变量 - 攻击1")] public string Key_isAttack01 = "IsAttack01";
-    [Label("状态变量 - 攻击2")] public string Key_isAttack02 = "IsAttack02";
-    [Label("状态变量 - 受击")] public string Key_isDamage = "IsDamage";
-    [Label("状态变量 - 死亡")] public string Key_isDead = "IsDead";
+    [SerializeField] public Transform Body;//骨骼蒙皮
+    [SerializeField] public Animator AnimPlayer;//动画控制器
+
+    [SerializeField] public string Key_isRun = "IsRun";
+    [SerializeField] public string Key_isJump = "IsJump";
+    [SerializeField] public string Key_isAttack01 = "IsAttack01";
+    [SerializeField] public string Key_isAttack02 = "IsAttack02";
+    [SerializeField] public string Key_isDamage = "IsDamage";
+    [SerializeField] public string Key_isDead = "IsDead";
 
     /// <summary>
     /// Start - 动作初始化

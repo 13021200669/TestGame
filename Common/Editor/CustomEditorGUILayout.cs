@@ -3,38 +3,69 @@ using UnityEditor;
 
 namespace CustomEditorGUI
 {
+    //布局模式
+    public enum CustomEditorGUILayoutMode
+    {
+        Start,  //行开头
+        Insert, //行插入
+        End,    //行结尾
+        Whole   //整行
+    }
+
     public static class CustomEditorGUILayout
     {
-        const float HorizontalHeight = 20;
-        const float LabelWidth = 60;
-        const float PropertyFieldMinWidth = 140;
-        const float InLineSpace = 10;
-        const float MinMaxSliderFloatFieldWidth = 40;
+        //布局常量
+        const float Height_Horizontal = 20;
+        const float Space_InLine = 10;
+
+        const float Width_Label = 60;
+
+        const float Width_Toggle = 20;
+
+        const float MinWidth_TextField = 140;
+
+        const float MinWidth_Slider = 140;
+
+        const float MinWidth_PropertyField = 140;
+
+        const float MinWidth_MinMaxSlider_Slider = 140;
+        const float Width_MinMaxSlider_FloatField = 50;
 
         /// <summary>
-        /// 单行单Property
+        /// Toggle开关
         /// </summary>
         /// <param name="label"></param>
         /// <param name="property"></param>
         /// <param name="GUIOptions"></param>
-        public static void CustomField_Toggle(string label,Object target, ref bool isTrue)
+        public static void CustomField_Toggle(CustomEditorGUILayoutMode mode, string label, Object target, ref bool isTrue)
         {
-            EditorGUILayout.BeginHorizontal(GUILayout.Height(HorizontalHeight));
+            //是否开始新一行
+            if (mode == CustomEditorGUILayoutMode.Whole || mode == CustomEditorGUILayoutMode.Start)
+                EditorGUILayout.BeginHorizontal(GUILayout.Height(Height_Horizontal));
 
-            EditorGUILayout.LabelField(label, GUILayout.Width(LabelWidth));
+            //行内是否需要间距
+            if (mode == CustomEditorGUILayoutMode.Insert || mode == CustomEditorGUILayoutMode.End)
+                GUILayout.Space(Space_InLine);
 
+            //property标题
+            EditorGUILayout.LabelField(label, GUILayout.Width(Width_Label));
+
+            //开始检测property变化
             EditorGUI.BeginChangeCheck();
 
+            //创建临时变量，读取和存储property值
             bool tempValue = isTrue;
-            tempValue = EditorGUILayout.Toggle(new GUIContent(), tempValue, GUILayout.MinWidth(PropertyFieldMinWidth));
 
-            //检测property变化
+            //绘制property
+            tempValue = EditorGUILayout.Toggle(new GUIContent(), tempValue, GUILayout.Width(Width_Toggle));
+
+            //结束检测property变化
             if (EditorGUI.EndChangeCheck())
             {
                 //对场景标记待保存状态
                 Undo.RecordObject(target, "Toggle Change");
 
-                //获取Toggle的值，赋给property
+                //获取property值并导出
                 isTrue = tempValue;
 
                 //public static void RecordObject (Object objectToUndo, string name)
@@ -43,96 +74,112 @@ namespace CustomEditorGUI
                 PrefabUtility.RecordPrefabInstancePropertyModifications(target);
             }
 
-            EditorGUILayout.EndHorizontal();
+            //是否结束当前行
+            if (mode == CustomEditorGUILayoutMode.Whole || mode == CustomEditorGUILayoutMode.End)
+                EditorGUILayout.EndHorizontal();
         }
 
         /// <summary>
-        /// 单行单Property
+        /// 序列化Property
         /// </summary>
         /// <param name="label"></param>
         /// <param name="property"></param>
         /// <param name="GUIOptions"></param>
-        public static void CustomField_Property(string label, SerializedProperty property)
+        public static void CustomField_Property(CustomEditorGUILayoutMode mode, string label, SerializedProperty property)
         {
-            EditorGUILayout.BeginHorizontal(GUILayout.Height(HorizontalHeight));
+            //是否开始新一行
+            if (mode == CustomEditorGUILayoutMode.Whole || mode == CustomEditorGUILayoutMode.Start)
+                EditorGUILayout.BeginHorizontal(GUILayout.Height(Height_Horizontal));
 
-            EditorGUILayout.LabelField(label, GUILayout.Width(LabelWidth));
-            EditorGUILayout.PropertyField(property, new GUIContent(), GUILayout.MinWidth(PropertyFieldMinWidth));
+            //行内是否需要间距
+            if (mode == CustomEditorGUILayoutMode.Insert || mode == CustomEditorGUILayoutMode.End)
+                GUILayout.Space(Space_InLine);
 
-            EditorGUILayout.EndHorizontal();
+            //property标题
+            EditorGUILayout.LabelField(label, GUILayout.Width(Width_Label));
+
+            //绘制property
+            EditorGUILayout.PropertyField(property, new GUIContent(), GUILayout.MinWidth(MinWidth_PropertyField));
+
+            //是否结束当前行
+            if (mode == CustomEditorGUILayoutMode.Whole || mode == CustomEditorGUILayoutMode.End)
+                EditorGUILayout.EndHorizontal();
+        }
+
+
+        public static void CustomField_TextField(CustomEditorGUILayoutMode mode, string label, Object target, ref string text)
+        {
+            //是否开始新一行
+            if (mode == CustomEditorGUILayoutMode.Whole || mode == CustomEditorGUILayoutMode.Start)
+                EditorGUILayout.BeginHorizontal(GUILayout.Height(Height_Horizontal));
+
+            //行内是否需要间距
+            if (mode == CustomEditorGUILayoutMode.Insert || mode == CustomEditorGUILayoutMode.End)
+                GUILayout.Space(Space_InLine);
+
+            //property标题
+            EditorGUILayout.LabelField(label, GUILayout.Width(Width_Label));
+
+            //开始检测property变化
+            EditorGUI.BeginChangeCheck();
+
+            //创建临时变量，读取和存储property值
+            string tempValue = text;
+
+            //绘制property
+            tempValue = EditorGUILayout.TextField(new GUIContent(), tempValue, GUILayout.MinWidth(MinWidth_TextField));
+
+            //结束检测property变化
+            if (EditorGUI.EndChangeCheck())
+            {
+                //对场景标记待保存状态
+                Undo.RecordObject(target, "Text Change");
+
+                //获取property值并导出
+                text = tempValue;
+
+                //public static void RecordObject (Object objectToUndo, string name)
+                //对于 objectToUndo 为预制件实例的情况下正确处理实例
+                //必须在 RecordObject 之后调用 PrefabUtility.RecordPrefabInstancePropertyModifications
+                PrefabUtility.RecordPrefabInstancePropertyModifications(target);
+            }
+
+            //是否结束当前行
+            if (mode == CustomEditorGUILayoutMode.Whole || mode == CustomEditorGUILayoutMode.End)
+                EditorGUILayout.EndHorizontal();
         }
 
         /// <summary>
-        /// 单行双Property
-        /// </summary>
-        /// <param name="label1"></param>
-        /// <param name="property1"></param>
-        /// <param name="label2"></param>
-        /// <param name="property2"></param>
-        /// <param name="GUIOptions"></param>
-        public static void CustomField_Property(string label1, SerializedProperty property1, string label2, SerializedProperty property2)
-        {
-            EditorGUILayout.BeginHorizontal(GUILayout.Height(HorizontalHeight));
-
-            EditorGUILayout.LabelField(label1, GUILayout.Width(LabelWidth));
-            EditorGUILayout.PropertyField(property1, new GUIContent(), GUILayout.MinWidth(PropertyFieldMinWidth));
-
-            GUILayout.Space(InLineSpace);
-
-            EditorGUILayout.LabelField(label2, GUILayout.Width(LabelWidth));
-            EditorGUILayout.PropertyField(property2, new GUIContent(), GUILayout.MinWidth(PropertyFieldMinWidth));
-
-            EditorGUILayout.EndHorizontal();
-        }
-
-        /// <summary>
-        /// 单行单Slider
+        /// Slider滑动条
         /// </summary>
         /// <param name="label"></param>
         /// <param name="property"></param>
         /// <param name="minLimit"></param>
         /// <param name="maxLimit"></param>
         /// <param name="GUIOptions"></param>
-        public static void CustomField_Slider(string label, SerializedProperty property, float minLimit, float maxLimit)
+        public static void CustomField_Slider(CustomEditorGUILayoutMode mode, string label, SerializedProperty property, float minLimit, float maxLimit)
         {
-            EditorGUILayout.BeginHorizontal(GUILayout.Height(HorizontalHeight));
+            //是否开始新一行
+            if (mode == CustomEditorGUILayoutMode.Whole || mode == CustomEditorGUILayoutMode.Start)
+                EditorGUILayout.BeginHorizontal(GUILayout.Height(Height_Horizontal));
 
-            EditorGUILayout.LabelField(label, GUILayout.Width(LabelWidth));
-            EditorGUILayout.Slider(property, minLimit, maxLimit, new GUIContent(), GUILayout.MinWidth(PropertyFieldMinWidth));
+            //行内是否需要间距
+            if (mode == CustomEditorGUILayoutMode.Insert || mode == CustomEditorGUILayoutMode.End)
+                GUILayout.Space(Space_InLine);
 
-            EditorGUILayout.EndHorizontal();
+            //property标题
+            EditorGUILayout.LabelField(label, GUILayout.Width(Width_Label));
+
+            //绘制property
+            EditorGUILayout.Slider(property, minLimit, maxLimit, new GUIContent(), GUILayout.MinWidth(MinWidth_Slider));
+
+            //是否结束当前行
+            if (mode == CustomEditorGUILayoutMode.Whole || mode == CustomEditorGUILayoutMode.End)
+                EditorGUILayout.EndHorizontal();
         }
 
         /// <summary>
-        /// 单行双Slider
-        /// </summary>
-        /// <param name="label1"></param>
-        /// <param name="property1"></param>
-        /// <param name="label2"></param>
-        /// <param name="property2"></param>
-        /// <param name="minLimit"></param>
-        /// <param name="maxLimit"></param>
-        /// <param name="GUIOptions"></param>
-        public static void CustomField_Slider(string label1, SerializedProperty property1, string label2, SerializedProperty property2, params float[] para)
-        {
-            EditorGUILayout.BeginHorizontal(GUILayout.Height(HorizontalHeight));
-
-            EditorGUILayout.LabelField(label1, GUILayout.Width(LabelWidth));
-            EditorGUILayout.Slider(property1, para[0], para[1], new GUIContent(), GUILayout.MinWidth(PropertyFieldMinWidth));
-
-            GUILayout.Space(InLineSpace);
-
-            EditorGUILayout.LabelField(label2, GUILayout.Width(LabelWidth));
-            EditorGUILayout.Slider(property2,
-                para.Length > 2 ? para[2] : para[0],
-                para.Length > 2 ? para[3] : para[1],
-                new GUIContent(), GUILayout.MinWidth(PropertyFieldMinWidth));
-
-            EditorGUILayout.EndHorizontal();
-        }
-
-        /// <summary>
-        /// 单行单MinMaxSlider
+        /// MinMaxSlider范围滑动条
         /// </summary>
         /// <param name="label"></param>
         /// <param name="minLimit"></param>
@@ -140,33 +187,40 @@ namespace CustomEditorGUI
         /// <param name="target"></param>
         /// <param name="minValue"></param>
         /// <param name="maxValue"></param>
-        public static void CustomField_MinMaxSlider(string label, float minLimit, float maxLimit, Object target, ref float minValue, ref float maxValue)
+        public static void CustomField_MinMaxSlider(CustomEditorGUILayoutMode mode, string label, float minLimit, float maxLimit, Object target, ref float minValue, ref float maxValue)
         {
-            //开始该行
-            EditorGUILayout.BeginHorizontal(GUILayout.Height(HorizontalHeight));
+            //是否开始新一行
+            if (mode == CustomEditorGUILayoutMode.Whole || mode == CustomEditorGUILayoutMode.Start)
+                EditorGUILayout.BeginHorizontal(GUILayout.Height(Height_Horizontal));
+
+            //行内是否需要间距
+            if (mode == CustomEditorGUILayoutMode.Insert || mode == CustomEditorGUILayoutMode.End)
+                GUILayout.Space(Space_InLine);
 
             //property名称
-            EditorGUILayout.LabelField(label, GUILayout.Width(LabelWidth));
+            EditorGUILayout.LabelField(label, GUILayout.Width(Width_Label));
+
+            //结束检测property变化
             EditorGUI.BeginChangeCheck();
 
-            //获取property当前的值，赋给MinMaxSlider
+            //创建临时变量，读取和存储property值
             float _LeftValue = minValue;
             float _RightValue = maxValue;
 
-            //绘制MinMaxSlider和左右两个文本框
-            _LeftValue = EditorGUILayout.DelayedFloatField(_LeftValue, GUILayout.Width(MinMaxSliderFloatFieldWidth));
-            GUILayout.Space(InLineSpace);
-            EditorGUILayout.MinMaxSlider(ref _LeftValue, ref _RightValue, minLimit, maxLimit, GUILayout.MinWidth(PropertyFieldMinWidth));
-            GUILayout.Space(InLineSpace);
-            _RightValue = EditorGUILayout.DelayedFloatField(_RightValue, GUILayout.Width(MinMaxSliderFloatFieldWidth));
+            //绘制property
+            _LeftValue = EditorGUILayout.DelayedFloatField(_LeftValue, GUILayout.Width(Width_MinMaxSlider_FloatField));
+            GUILayout.Space(Space_InLine);
+            EditorGUILayout.MinMaxSlider(ref _LeftValue, ref _RightValue, minLimit, maxLimit, GUILayout.MinWidth(MinWidth_MinMaxSlider_Slider));
+            GUILayout.Space(Space_InLine);
+            _RightValue = EditorGUILayout.DelayedFloatField(_RightValue, GUILayout.Width(Width_MinMaxSlider_FloatField));
 
-            //检测property变化
+            //结束检测property变化
             if (EditorGUI.EndChangeCheck())
             {
                 //对场景标记待保存状态
                 Undo.RecordObject(target, "MinMaxSlider Change");
 
-                //获取MinMaxSlider的值，赋给property
+                //获取property值并导出
                 minValue = _LeftValue;
                 maxValue = _RightValue;
 
@@ -176,7 +230,9 @@ namespace CustomEditorGUI
                 PrefabUtility.RecordPrefabInstancePropertyModifications(target);
             }
 
-            EditorGUILayout.EndHorizontal();
+            //是否结束当前行
+            if (mode == CustomEditorGUILayoutMode.Whole || mode == CustomEditorGUILayoutMode.End)
+                EditorGUILayout.EndHorizontal();
         }
     }
 }

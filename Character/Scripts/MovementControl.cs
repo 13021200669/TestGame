@@ -4,10 +4,14 @@
 public partial class CharacterControl : MonoBehaviour
 {
     //运动模块
-    [SerializeField] public float MoveSpeed = 10;//移动速度
-    [SerializeField] public float JumpForce = 100;//跳跃力度
+    [SerializeField] public Rigidbody RigPlayer;//刚体组件
+    [SerializeField] public CapsuleCollider ColPlayer;//胶囊碰撞体
 
-    [SerializeField] public bool isAccelerateTimeUnLimited = false;//无限冲刺
+    [SerializeField] public float MoveSpeed = 10;//移动速度
+    [SerializeField] public float JumpForce = 250;//跳跃力度
+    [SerializeField] public float MaxFallSpeed = 20;//最大下落速度
+
+    [SerializeField] public bool isAccelerateTimeUnLimited = true;//无限冲刺
 
     [SerializeField] public float Accelerate_Multiple = 3f;//冲刺倍率
     [SerializeField] public float Accelerate_Time = 1f;//冲刺时间
@@ -51,11 +55,33 @@ public partial class CharacterControl : MonoBehaviour
     /// </summary>
     public void Move()
     {
-        float x = Input.GetAxis("Horizontal");
-        float z = Input.GetAxis("Vertical");
+        float h = Input.GetAxis("Horizontal");
+        float v = Input.GetAxis("Vertical");
 
-        transform.position += (RotateX.right * x) * Time.deltaTime * (MoveMultiple * MoveSpeed);
-        transform.position += (RotateX.forward * z) * Time.deltaTime * (MoveMultiple * MoveSpeed);
+        Vector3 x = Vector3.Project(RigPlayer.velocity, RotateX.right);
+        Vector3 y = Vector3.Project(RigPlayer.velocity, transform.up);
+        Vector3 z = Vector3.Project(RigPlayer.velocity, RotateX.forward);
+
+        //移动时
+        bool isMoving = Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.D);
+
+        if (isMoving)
+        {
+            x = h * MoveSpeed * MoveMultiple * RotateX.right / (Mathf.Sqrt(h * h + v * v) + 0.0001f);
+            z = v * MoveSpeed * MoveMultiple * RotateX.forward / (Mathf.Sqrt(h * h + v * v) + 0.0001f);
+        }
+        //没有行动时
+        else
+        {
+            x = Vector3.zero;
+            z = Vector3.zero;
+        }
+
+        //自由落体
+        if (y.magnitude > MaxFallSpeed && Vector3.Dot(y, transform.up) < 0)
+            y = -MaxFallSpeed * transform.up;
+
+        RigPlayer.velocity = x + y + z;
     }
 
     /// <summary>
@@ -105,6 +131,6 @@ public partial class CharacterControl : MonoBehaviour
     /// </summary>
     public void Jump()
     {
-        RigPlayer.AddForce(Vector3.up * JumpForce);
+        RigPlayer.AddForce(transform.up * JumpForce);
     }
 }
