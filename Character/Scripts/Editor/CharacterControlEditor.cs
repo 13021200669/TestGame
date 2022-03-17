@@ -7,8 +7,7 @@ using CustomEditorGUI;
 public class CharacterControlEditor : Editor
 {
     //--------------------------运动模块--------------------------
-    SerializedProperty _RigPlayer;
-    SerializedProperty _ColPlayer;
+    SerializedProperty _Player;
 
     //移动速度
     SerializedProperty _MoveSpeed;
@@ -16,9 +15,14 @@ public class CharacterControlEditor : Editor
     const float _MaxLimit_MoveSpeed = 50f;
 
     //跳跃力度
-    SerializedProperty _JumpForce;
-    const float _MinLimit_JumpForce = 100f;
-    const float _MaxLimit_JumpForce = 500f;
+    SerializedProperty _JumpHeight;
+    const float _MinLimit_JumpHeight = 1f;
+    const float _MaxLimit_JumpHeight = 5f;
+
+    //模拟重力
+    SerializedProperty _GravityValue;
+    const float _MinLimit_GravityValue = 0f;
+    const float _MaxLimit_GravityValue = 50f;
 
     //最大下落速度
     SerializedProperty _MaxFallSpeed;
@@ -95,11 +99,12 @@ public class CharacterControlEditor : Editor
     void OnEnable()
     {
         //获取Property对象
-        _RigPlayer = serializedObject.FindProperty("RigPlayer");
-        _ColPlayer = serializedObject.FindProperty("ColPlayer");
+        _Player = serializedObject.FindProperty("Player");
 
         _MoveSpeed = serializedObject.FindProperty("MoveSpeed");
-        _JumpForce = serializedObject.FindProperty("JumpForce");
+        _JumpHeight = serializedObject.FindProperty("JumpHeight");
+
+        _GravityValue = serializedObject.FindProperty("GravityValue");
         _MaxFallSpeed = serializedObject.FindProperty("MaxFallSpeed");
 
         _Accelerate_Multiple = serializedObject.FindProperty("Accelerate_Multiple");
@@ -161,15 +166,15 @@ public class CharacterControlEditor : Editor
 
         GUILayout.Space(5);
 
-        CustomEditorGUILayout.CustomField_Property(CustomEditorGUILayoutMode.Start, "刚体", _RigPlayer);
-
-        CustomEditorGUILayout.CustomField_Property(CustomEditorGUILayoutMode.End, "碰撞体", _ColPlayer);
+        CustomEditorGUILayout.CustomField_Property(CustomEditorGUILayoutMode.Whole, "角色控制", _Player);
 
         CustomEditorGUILayout.CustomField_Slider(CustomEditorGUILayoutMode.Start, "移动速度", _MoveSpeed, _MinLimit_MoveSpeed, _MaxLimit_MoveSpeed);
 
-        CustomEditorGUILayout.CustomField_Slider(CustomEditorGUILayoutMode.End, "跳跃力度", _JumpForce, _MinLimit_JumpForce, _MaxLimit_JumpForce);
+        CustomEditorGUILayout.CustomField_Slider(CustomEditorGUILayoutMode.End, "跳跃力度", _JumpHeight, _MinLimit_JumpHeight, _MaxLimit_JumpHeight);
+        
+        CustomEditorGUILayout.CustomField_Slider(CustomEditorGUILayoutMode.Start, "模拟重力", _GravityValue, _MinLimit_GravityValue, _MaxLimit_GravityValue);
 
-        CustomEditorGUILayout.CustomField_Slider(CustomEditorGUILayoutMode.Whole, "下落速度", _MaxFallSpeed, _MinLimit_MaxFallSpeed, _MaxLimit_MaxFallSpeed);
+        CustomEditorGUILayout.CustomField_Slider(CustomEditorGUILayoutMode.End, "下落速度", _MaxFallSpeed, _MinLimit_MaxFallSpeed, _MaxLimit_MaxFallSpeed);
 
         CustomEditorGUILayout.CustomField_Slider(CustomEditorGUILayoutMode.Start, "冲刺倍率", _Accelerate_Multiple, _MinLimit_Accelerate_Multiple, _MaxLimit_Accelerate_Multiple);
 

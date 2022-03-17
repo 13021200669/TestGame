@@ -1,16 +1,14 @@
 ﻿using UnityEngine;
 
 
-public partial class CharacterControl : MonoBehaviour
+public partial class CustomCharacterControl : MonoBehaviour
 {
     //运动模块
-    [SerializeField] public CharacterController Player;//角色控制器组件
+    [SerializeField] public Rigidbody RigPlayer;//刚体组件
     [SerializeField] public CapsuleCollider ColPlayer;//胶囊碰撞体
 
     [SerializeField] public float MoveSpeed = 10;//移动速度
-    [SerializeField] public float JumpHeight = 3f;//跳跃力度
-
-    [SerializeField] public float GravityValue = 9.81f;//模拟重力
+    [SerializeField] public float JumpHeight = 250;//跳跃力度
     [SerializeField] public float MaxFallSpeed = 20;//最大下落速度
 
     [SerializeField] public bool isAccelerateTimeUnLimited = true;//无限冲刺
@@ -18,10 +16,7 @@ public partial class CharacterControl : MonoBehaviour
     [SerializeField] public float Accelerate_Multiple = 3f;//冲刺倍率
     [SerializeField] public float Accelerate_Time = 1f;//冲刺时间
 
-    private Vector3 playerVelocity = Vector3.zero;
-    private bool isPlayerGrounded;
-
-    private float moveMultiple = 1f;
+    private float MoveMultiple = 1f;
     private bool isAccelerate = false;
 
     /// <summary>
@@ -50,6 +45,8 @@ public partial class CharacterControl : MonoBehaviour
                 AccelerateLimited();
         }
 
+        if (Input.GetKeyDown(KeyCode.Space)) Jump();
+
         Move();
     }
 
@@ -58,45 +55,33 @@ public partial class CharacterControl : MonoBehaviour
     /// </summary>
     public void Move()
     {
-
         float h = Input.GetAxis("Horizontal");
         float v = Input.GetAxis("Vertical");
 
-        Vector3 x_Velocity, z_Velocity;
-        Vector3 y_Velocity = Vector3.Project(playerVelocity, transform.up);
+        Vector3 x = Vector3.Project(RigPlayer.velocity, RotateX.right);
+        Vector3 y = Vector3.Project(RigPlayer.velocity, transform.up);
+        Vector3 z = Vector3.Project(RigPlayer.velocity, RotateX.forward);
 
-        ////水平运动 - X, Z
+        //移动时
         bool isMoving = Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.D);
+
         if (isMoving)
         {
-            x_Velocity = h * MoveSpeed * moveMultiple * RotateX.right / (Mathf.Sqrt(h * h + v * v) + 0.0001f);
-            z_Velocity = v * MoveSpeed * moveMultiple * RotateX.forward / (Mathf.Sqrt(h * h + v * v) + 0.0001f);
+            x = h * MoveSpeed * MoveMultiple * RotateX.right / (Mathf.Sqrt(h * h + v * v) + 0.0001f);
+            z = v * MoveSpeed * MoveMultiple * RotateX.forward / (Mathf.Sqrt(h * h + v * v) + 0.0001f);
         }
+        //没有行动时
         else
         {
-            x_Velocity = Vector3.zero;
-            z_Velocity = Vector3.zero;
+            x = Vector3.zero;
+            z = Vector3.zero;
         }
 
-        //竖直运动 - Y
-        isPlayerGrounded = Player.isGrounded;
-        //在地面上
-        if (Input.GetKeyDown(KeyCode.Space) && isPlayerGrounded)
-        {
-            y_Velocity = Mathf.Sqrt(JumpHeight * 2.0f * GravityValue) * transform.up;
-        }
-        //在空中
-        else
-        {
-            if (y_Velocity.magnitude > MaxFallSpeed && Vector3.Dot(y_Velocity, transform.up) < 0)
-                y_Velocity = MaxFallSpeed * -transform.up;
-            else
-                y_Velocity += GravityValue * Time.deltaTime * -transform.up;
-        }
+        //自由落体
+        if (y.magnitude > MaxFallSpeed && Vector3.Dot(y, transform.up) < 0)
+            y = -MaxFallSpeed * transform.up;
 
-        playerVelocity = x_Velocity + y_Velocity + z_Velocity;
-
-        Player.Move(playerVelocity * Time.deltaTime);
+        RigPlayer.velocity = x + y + z;
     }
 
     /// <summary>
@@ -105,7 +90,7 @@ public partial class CharacterControl : MonoBehaviour
     public void Accelerate()
     {
         //速度系数变大
-        moveMultiple = Accelerate_Multiple;
+        MoveMultiple = Accelerate_Multiple;
         //视野拉远
         TargetFieldofView = Accelerate_Field_of_View;
         TargetFocusSize = Accelerate_FocusSize;
@@ -117,7 +102,7 @@ public partial class CharacterControl : MonoBehaviour
     public void AccelerateLimited()
     {
         //速度系数变大
-        moveMultiple = Accelerate_Multiple;
+        MoveMultiple = Accelerate_Multiple;
         //视野拉远
         TargetFieldofView = Accelerate_Field_of_View;
         TargetFocusSize = Accelerate_FocusSize;
@@ -133,11 +118,19 @@ public partial class CharacterControl : MonoBehaviour
     public void SpeedRecover()
     {
         //速度系数复原
-        moveMultiple = 1f;
+        MoveMultiple = 1f;
         //视野恢复
         TargetFieldofView = Normal_Field_of_View;
         TargetFocusSize = Normal_FocusSize;
         //退出冲刺状态
         isAccelerate = false;
+    }
+
+    /// <summary>
+    /// 跳跃
+    /// </summary>
+    public void Jump()
+    {
+        RigPlayer.AddForce(transform.up * JumpHeight);
     }
 }

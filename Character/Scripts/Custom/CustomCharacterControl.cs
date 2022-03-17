@@ -1,16 +1,16 @@
 using UnityEngine;
 
-public partial class CharacterControl : MonoBehaviour
+public partial class CustomCharacterControl : MonoBehaviour
 {
     public bool CheckDisConnected()
     {
-        return !Player || !ColPlayer || !CamPlayer || !FocusScript || !RotateX || !RotateY || !Body || !AnimPlayer;
+        return !RigPlayer || !ColPlayer || !CamPlayer || !FocusScript || !RotateX || !RotateY || !Body || !AnimPlayer;
     }
 
     public void AutoConnect()
     {
-        if (!Player)
-            Player = GetComponent<CharacterController>();
+        if (!RigPlayer)
+            RigPlayer = GetComponent<Rigidbody>();
         if (!ColPlayer)
             ColPlayer = GetComponent<CapsuleCollider>();
 
@@ -57,5 +57,6 @@ public partial class CharacterControl : MonoBehaviour
         {
             Cursor.lockState = CursorLockMode.Locked;
         }
+
     }
 }
