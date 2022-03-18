@@ -6,6 +6,17 @@ using CustomEditorGUI;
 [CanEditMultipleObjects]
 public class CharacterControlEditor : Editor
 {
+    //--------------------------缩小模块--------------------------
+    //缩小比例
+    SerializedProperty _ShrinkScale;
+    const float _MinLimit_ShrinkScale = 0.1f;
+    const float _MaxLimit_ShrinkScale = 10f;
+
+    //缩小时间
+    SerializedProperty _ShrinkTime;
+    const float _MinLimit_ShrinkTime = 0.1f;
+    const float _MaxLimit_ShrinkTime = 1f;
+
     //--------------------------运动模块--------------------------
     SerializedProperty _Player;
 
@@ -99,6 +110,9 @@ public class CharacterControlEditor : Editor
     void OnEnable()
     {
         //获取Property对象
+        _ShrinkScale = serializedObject.FindProperty("ShrinkScale");
+        _ShrinkTime = serializedObject.FindProperty("ShrinkTime");
+
         _Player = serializedObject.FindProperty("Player");
 
         _MoveSpeed = serializedObject.FindProperty("MoveSpeed");
@@ -162,6 +176,16 @@ public class CharacterControlEditor : Editor
 
         GUILayout.Space(5);
 
+        EditorGUILayout.LabelField("缩小模块------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+
+        GUILayout.Space(5);
+
+        CustomEditorGUILayout.CustomField_Slider(CustomEditorGUILayoutMode.Start, "缩小比例", _ShrinkScale, _MinLimit_ShrinkScale, _MaxLimit_ShrinkScale);
+
+        CustomEditorGUILayout.CustomField_Slider(CustomEditorGUILayoutMode.End, "缩小时间", _ShrinkTime, _MinLimit_ShrinkTime, _MaxLimit_ShrinkTime);
+
+        EditorGUILayout.LabelField("---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+
         EditorGUILayout.LabelField("运动模块------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
 
         GUILayout.Space(5);
@@ -170,8 +194,8 @@ public class CharacterControlEditor : Editor
 
         CustomEditorGUILayout.CustomField_Slider(CustomEditorGUILayoutMode.Start, "移动速度", _MoveSpeed, _MinLimit_MoveSpeed, _MaxLimit_MoveSpeed);
 
-        CustomEditorGUILayout.CustomField_Slider(CustomEditorGUILayoutMode.End, "跳跃力度", _JumpHeight, _MinLimit_JumpHeight, _MaxLimit_JumpHeight);
-        
+        CustomEditorGUILayout.CustomField_Slider(CustomEditorGUILayoutMode.End, "跳跃高度", _JumpHeight, _MinLimit_JumpHeight, _MaxLimit_JumpHeight);
+
         CustomEditorGUILayout.CustomField_Slider(CustomEditorGUILayoutMode.Start, "模拟重力", _GravityValue, _MinLimit_GravityValue, _MaxLimit_GravityValue);
 
         CustomEditorGUILayout.CustomField_Slider(CustomEditorGUILayoutMode.End, "下落速度", _MaxFallSpeed, _MinLimit_MaxFallSpeed, _MaxLimit_MaxFallSpeed);

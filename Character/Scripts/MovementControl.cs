@@ -8,10 +8,10 @@ public partial class CharacterControl : MonoBehaviour
     [SerializeField] public CapsuleCollider ColPlayer;//胶囊碰撞体
 
     [SerializeField] public float MoveSpeed = 10;//移动速度
-    [SerializeField] public float JumpHeight = 3f;//跳跃力度
+    [SerializeField] public float JumpHeight = 1.5f;//跳跃力度
 
     [SerializeField] public float GravityValue = 9.81f;//模拟重力
-    [SerializeField] public float MaxFallSpeed = 20;//最大下落速度
+    [SerializeField] public float MaxFallSpeed = 10;//最大下落速度
 
     [SerializeField] public bool isAccelerateTimeUnLimited = true;//无限冲刺
 
@@ -69,8 +69,8 @@ public partial class CharacterControl : MonoBehaviour
         bool isMoving = Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.D);
         if (isMoving)
         {
-            x_Velocity = h * MoveSpeed * moveMultiple * RotateX.right / (Mathf.Sqrt(h * h + v * v) + 0.0001f);
-            z_Velocity = v * MoveSpeed * moveMultiple * RotateX.forward / (Mathf.Sqrt(h * h + v * v) + 0.0001f);
+            x_Velocity = h * MoveSpeed * PlayerScale * moveMultiple * RotateX.right / (Mathf.Sqrt(h * h + v * v) + 0.0001f);
+            z_Velocity = v * MoveSpeed * PlayerScale * moveMultiple * RotateX.forward / (Mathf.Sqrt(h * h + v * v) + 0.0001f);
         }
         else
         {
@@ -83,7 +83,7 @@ public partial class CharacterControl : MonoBehaviour
         //在地面上
         if (Input.GetKeyDown(KeyCode.Space) && isPlayerGrounded)
         {
-            y_Velocity = Mathf.Sqrt(JumpHeight * 2.0f * GravityValue) * transform.up;
+            y_Velocity = Mathf.Sqrt(JumpHeight * PlayerScale * 2.0f * GravityValue) * transform.up;
         }
         //在空中
         else

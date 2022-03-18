@@ -50,6 +50,8 @@ public partial class CharacterControl : MonoBehaviour
 
             UpdateCameraController();
 
+            UpdateScaleController();
+
             if (Input.GetKeyDown(KeyCode.Escape))
                 Cursor.lockState = CursorLockMode.None;
         }
